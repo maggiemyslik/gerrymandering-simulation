@@ -1,0 +1,6 @@
+__pycache__/
+.DS_Store
+# data is rebuilt from sources by the pipeline, too large for git
+data/
+# Census API key, never committed
+.env
