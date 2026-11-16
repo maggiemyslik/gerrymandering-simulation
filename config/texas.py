@@ -2,6 +2,7 @@
 config = {
     "name": "texas",
     "fips": "48",
+    "postal": "TX",  # state abbreviation, used in Census file names
     "n_districts": 38,
 
     # Party that drew the 2025 map. Orients the signed lean L so that positive = lean towards
@@ -38,6 +39,9 @@ config = {
         "2021": 38,
         "2025": 38,
     },
+
+    # Projected coordinate system for distances and shared borders: Texas Centric Albers (metres).
+    "crs_projected": 3083,
 
     # Census pulls used by 01_download.py.
     "acs_year": 2023,  # ACS 5-year 2019-2023, published on 2020 block groups

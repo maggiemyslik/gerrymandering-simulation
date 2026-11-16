@@ -10,7 +10,6 @@ import networkx as nx
 import numpy as np
 import pandas as pd
 
-
 ROOT = Path(__file__).resolve().parents[1]
 CONFIG = ROOT / "config"
 RAW = ROOT / "data" / "raw"
@@ -74,6 +73,10 @@ def paths(cfg):
         "enacted_plan": PROCESSED / f"{s}_enacted_plan.parquet",
         "recentred": PROCESSED / f"{s}_recentred.parquet",
         "pct_by_chain": PROCESSED / f"{s}_percentiles_by_chain.parquet",
+        "block_votes": INTERIM / f"{s}_block_votes.parquet",      # 2020 block GEOID, one column per year, race and party
+        "vote_totals": INTERIM / f"{s}_vote_totals.csv",          # each race's votes in the source file and after placement on blocks
+        "enacted_splits": TABLES / f"{s}_enacted_splits.csv",     # units split by each enacted map, population moved
+        "island_links": TABLES / f"{s}_island_links.csv",         # edges added to connect islands to the mainland
     }
 
 

@@ -2,6 +2,7 @@
 config = {
     "name": "california",
     "fips": "06",
+    "postal": "CA",  # state abbreviation, used in Census file names
     "n_districts": 52,
 
     # Party that drew the 2025 map. Orients the signed lean L so that positive = lean towards
@@ -19,10 +20,36 @@ config = {
     # Every statewide race with both a Democratic and a Republican candidate is included,
     # weighted equally. Race codes become column names {year}_{race}_D and {year}_{race}_R
     # in the units table. Filled in once the raw election files' column headers are known.
+    # Race codes are the Statewide Database's column prefixes: PRS president, USS US Senate,
+    # USP US Senate partial term, GOV governor, LTG lieutenant governor, SOS secretary of state,
+    # CON controller, TRS treasurer, ATG attorney general, INS insurance commissioner.
+    # Every statewide race with a Democrat (DEM01) and a Republican (REP01) in the general election,
+    # read from the files' column headers. Left out: Democrat-versus-Democrat races (US Senate 2016
+    # and 2018, lieutenant governor 2018), insurance commissioner 2018 (Democrat versus independent),
+    # and the non-partisan superintendent of public instruction (SPI).
     "elections": {
-        2022: [],
-        2024: [],
+        2016: ["PRS"],
+        2018: ["ATG", "CON", "GOV", "SOS", "TRS"],
+        2020: ["PRS"],
+        2022: ["ATG", "CON", "GOV", "INS", "LTG", "SOS", "TRS", "USP", "USS"],
+        2024: ["PRS", "USP", "USS"],
     },
+
+    # Statewide Database files by year. 2022 and 2024: precinct results with a precinct-to-2020-block
+    # conversion (downloaded by hand). 2016 to 2020: the same files but converted to 2010 blocks,
+    # downloaded by 01_download.py and moved to 2020 blocks with the Census 2010-2020 block crosswalk.
+    "swdb_2020_block_years": [2022, 2024],
+    "swdb_2010_block_years": [2016, 2018, 2020],
+
+    # Enacted map files (under data/raw/california/plans/) and how each is laid out.
+    "plan_files": {
+        "2010": {"path": "2010/BlockAssign_ST06_CA_CD.txt", "format": "census_baf"},
+        "2021": {"path": "2021/CD-Final-equiv.xlsx", "format": "xlsx_no_header"},
+        "2025": {"path": "2025/AB604.csv", "format": "csv_no_header"},
+    },
+
+    # Projected coordinate system for distances and shared borders: California Albers (metres).
+    "crs_projected": 3310,
 
     # Which enacted map was in force for each election year (spec, "scope").
     "map_in_force": {

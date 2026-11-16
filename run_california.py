@@ -1,20 +1,17 @@
-# California pipeline: every stage in order, each followed by its check; a failed check stops the
-# run. Starts from the raw files in data/raw/california/. No arguments:
-#   python run_california.py
-
+# Runs the California pipeline: every stage in order, each followed by its check, stopping at the
+# first failure. Stages 06 to 09 are added once the 2010-era maps are handled descriptively.
 import sys
 from pathlib import Path
 
-sys.path[:0] = [str(Path(__file__).resolve().parent / d) for d in ("src", "validation")]
-from common import load_config, run_steps  # noqa: E402
+ROOT = Path(__file__).resolve().parent
+sys.path[:0] = [str(ROOT / "src"), str(ROOT / "validation")]
 
-STEPS = [
-    "00_inspect_raw",   # lists every raw file's columns and first rows: outputs/raw_inspection_california.txt
-    # Stages 02 to 05 and their checks are added here once written, then:
-    # 06_run_ensemble, check_ensemble, 07_score_plans, check_scores,
-    # 08_recentre, check_recentre, 09_descriptives
-]
+from common import load_config, run_steps
 
-# The guard stops the parallel chain processes from re-running the pipeline when they start
-if __name__ == "__main__":
-    run_steps(load_config("california"), STEPS)
+run_steps(load_config("california"), [
+    "00_inspect_raw",
+    "02_build_units", "check_units",
+    "03_crosswalk", "check_crosswalk",
+    "04_attach_votes",
+    "05_enacted_assignments", "check_enacted", "check_graph",
+])
